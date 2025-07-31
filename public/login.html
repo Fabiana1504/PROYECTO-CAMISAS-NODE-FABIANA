@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ <meta charset="UTF-8">
+ <title>Iniciar Sesión</title>
+ <style>
+   body {
+     background: #f5f6fa;
+     font-family: 'Segoe UI', Arial, sans-serif;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     height: 100vh;
+     margin: 0;
+   }
+   .login-container {
+     background: #fff;
+     padding: 2rem 2.5rem;
+     border-radius: 12px;
+     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+     min-width: 320px;
+   }
+   .login-container h2 {
+     text-align: center;
+     margin-bottom: 1.5rem;
+     color: #2d3436;
+   }
+   .login-container input[type="email"],
+   .login-container input[type="password"] {
+     width: 100%;
+     padding: 0.7rem;
+     margin-bottom: 1rem;
+     border: 1px solid #dfe6e9;
+     border-radius: 6px;
+     font-size: 1rem;
+     transition: border 0.2s;
+   }
+   .login-container input:focus {
+     border-color: #0984e3;
+     outline: none;
+   }
+   .login-container button[type="submit"] {
+     width: 100%;
+     background: #0984e3;
+     color: #fff;
+     border: none;
+     padding: 0.8rem;
+     border-radius: 6px;
+     font-size: 1rem;
+     cursor: pointer;
+     transition: background 0.2s;
+   }
+   .login-container button[type="submit"]:hover {
+     background: #74b9ff;
+   }
+   #mensaje {
+     text-align: center;
+     margin-top: 1rem;
+     color: #d63031;
+   }
+ </style>
+</head>
+<body>
+ <div class="login-container">
+   <h2>Login</h2>
+   <form id="formLogin">
+     <input type="email" id="email" placeholder="Correo electrónico" required>
+     <input type="password" id="clave" placeholder="Contraseña" required>
+     <button type="submit">Iniciar sesión</button>
+   </form>
+   <p id="mensaje"></p>
+ </div>
+ <script>
+ document.getElementById('formLogin').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ const datos = {
+ email: document.getElementById('email').value,
+ clave: document.getElementById('clave').value
+ };
+
+ console.log('Datos de inicio de sesión:', datos);
+ try {
+ const respuesta = await fetch('/api/usuarios/login', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify(datos)
+ });
+ const resultado = await respuesta.json();
+ if (!respuesta.ok) {
+ document.getElementById('mensaje').innerText = resultado.error || 'Credenciales inválidas';
+ return;
+ }
+ // Guardar el token en localStorage
+ localStorage.setItem('token', resultado.token);
+ document.getElementById('mensaje').innerText = '¡Inicio de sesión exitoso!';
+ // Redireccionar o continuar lógica
+ // window.location.href = 'dashboard.html'; // si aplica
+const token = localStorage.getItem('token');
+location.href = `/camiseta?token=${encodeURIComponent(token)}`;
+ } catch (error) {
+ console.error('Error al iniciar sesión:', error);
+ document.getElementById('mensaje').innerText = 'Ocurrió un error en el servidor.';
+ }
+ });
+ </script>
+</body>
