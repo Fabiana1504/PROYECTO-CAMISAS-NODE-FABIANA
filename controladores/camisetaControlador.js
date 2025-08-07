@@ -36,10 +36,13 @@ const camisetasConUsuario = await Promise.all(
 
 exports.getCamisetaById = async (req, res) => {
   try {
-    const Camiseta = await Camiseta.findById(req.params.id);
-    if (!Camiseta) return res.status(404).json({ error: 'Camiseta no encontrado' });
-    res.json(Camiseta);
+    console.log("si llega");
+    console.log(req.params.id);
+    const camiseta = await Camiseta.findById(req.params.id);
+    if (!camiseta) return res.status(404).json({ error: 'Camiseta no encontrado' });
+    res.json(camiseta);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Error del servidor' }); 
   }
 };

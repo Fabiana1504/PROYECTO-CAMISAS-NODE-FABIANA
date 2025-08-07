@@ -1,337 +1,352 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Camiseta</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      body {
-        background: #f5f6fa;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-      }
-      h2 {
-        margin-top: 2rem;
-        color: #2d3436;
-        text-align: center;
-        font-size: 2rem;
-        letter-spacing: 1px;
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diseña tu Camiseta</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f7fafd;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      color: #222;
+      margin-top: 2.5rem;
+      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .camiseta-container {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      padding: 2.5rem 2rem 2rem 2rem;
+      margin-bottom: 2.5rem;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 900px;
+      max-width: 98vw;
+      transition: box-shadow 0.2s;
+    }
+    #camiseta-svg {
+      width: 850px;
+      height: 550px;
+      background: #f3f6fa;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      display: block;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .parte-camiseta {
+      transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s, filter 0.2s;
+      stroke: #b2bec3;
+      stroke-width: 0.3;
+    }
+    .parte-camiseta:hover {
+      stroke: #0984e3;
+      stroke-width: 1.2;
+      filter: drop-shadow(0 0 6px #0984e3);
+    }
+    .controls {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+    #color-picker {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      cursor: pointer;
+      background: #fff;
+      transition: box-shadow 0.2s;
+    }
+    button {
+      background: #222;
+      color: #fff;
+      border: none;
+      padding: 0.7rem 1.3rem;
+      border-radius: 7px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    button:hover {
+      background: #0984e3;
+      color: #fff;
+    }
+    #btn-modificar-real {
+      display: none;
+    }
+    h3 {
+      color: #222;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      margin-top: 2rem;
+      font-weight: 500;
+    }
+    /* Cambios aquí para la tabla */
+    .tabla-fullwidth-container {
+      width: 100vw;
+      max-width: 100vw;
+      overflow-x: auto;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    table.display {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      margin: 0;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      overflow: hidden;
+      font-size: 1rem;
+    }
+    table.display th, table.display td {
+      border: none;
+      padding: 0.7rem 0.5rem;
+      text-align: center;
+    }
+    table.display th {
+      background: #f3f6fa;
+      color: #222;
+      font-weight: 600;
+    }
+    table.display tr:nth-child(even) {
+      background: #f7fafd;
+    }
+    .miniatura {
+      width: 60px;
+      height: 40px;
+      display: block;
+      margin: 0 auto;
+      border-radius: 6px;
+      background: #f3f6fa;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    @media (max-width: 1000px) {
       .camiseta-container {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-        padding: 2rem;
-        margin-top: 2rem;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 950px;
-        max-width: 98vw;
+        width: 100vw;
+        padding: 1rem;
       }
       #camiseta-svg {
-        width: 900px;
-        height: 600px;
-        cursor: pointer;
-        background: #ecf0f1;
-        border-radius: 12px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-        transition: box-shadow 0.2s;
-        display: block;
-        margin: 0 auto;
+        width: 98vw;
+        height: auto;
       }
-      .parte-camiseta {
-        transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s, filter 0.2s;
-        stroke: #636e72;
-        stroke-width: 0.2;
+      .tabla-fullwidth-container,
+      table.display {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        font-size: 0.95rem;
       }
-      .parte-camiseta:hover {
-        stroke: #0984e3;
-        stroke-width: 1;
-        filter: drop-shadow(0 0 4px #0984e3);
-      }
-      .controls {
-        margin-top: 2rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-      }
-      #color-picker {
-        width: 48px;
-        height: 48px;
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-        cursor: pointer;
-      }
-      button {
-        background: #0984e3;
-        color: #fff;
-        border: none;
-        padding: 0.7rem 1.2rem;
-        border-radius: 8px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      button:hover {
-        background: #74b9ff;
-      }
-      @media (max-width: 1000px) {
-        .camiseta-container {
-          width: 100vw;
-          padding: 1rem;
-        }
-        #camiseta-svg {
-          width: 98vw;
-          height: auto;
-        }
-      }
-    </style>
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 </head>
 <body>
-    <h2>Diseña tu Camiseta</h2>
-    <div class="camiseta-container">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="1 2 26 14" id="camiseta-svg">
-        <path class="parte-camiseta" id="manga-izquierda" d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="#000000" />
-        <path class="parte-camiseta" id="torso" d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="#000000" />
-        <path class="parte-camiseta" id="manga-derecha" d="M 13 6 L 13 3 L 17 5 L 15 7" fill="#000000" />
-        <path class="parte-camiseta" id="cuelloizq" d="M 8 2 L 7 3 L 9 5 L 8 3" fill="#000000" />
-        <path class="parte-camiseta" id="cuelloder" d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="#000000" />
-      </svg>
-    </div>
-    <div class="controls">
-      <input type="color" id="color-picker" value="#ffffff" />
-      <button id="btn-guardar">Guardar Diseño</button>
-      <button id="btn-modificar-real">Modificar Diseño</button>
-      <button id="btn-limpiar">Reiniciar Colores</button>
-      <input type="hidden" id="camiseta-id">
-    </div>
-<h3>Mis camisetas</h3>
-<table id="tabla-camisetas" class="display">
-  <thead>
-    <tr>
-      <th>Miniatura</th>
-      <th>Fecha creación</th>
-      <th>Creador</th>  <!-- Nueva columna para el nombre/correo del creador -->
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- El cuerpo se llenará dinámicamente -->
-  </tbody>
-</table>
+  <h2>Diseña tu Camiseta</h2>
+  <div class="camiseta-container">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="1 2 26 14" id="camiseta-svg">
+      <path class="parte-camiseta" id="manga-izquierda" d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="#000000" />
+      <path class="parte-camiseta" id="torso" d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="#000000" />
+      <path class="parte-camiseta" id="manga-derecha" d="M 13 6 L 13 3 L 17 5 L 15 7" fill="#000000" />
+      <path class="parte-camiseta" id="cuelloizq" d="M 8 2 L 7 3 L 9 5 L 8 3" fill="#000000" />
+      <path class="parte-camiseta" id="cuelloder" d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="#000000" />
+    </svg>
+  </div>
+  <div class="controls">
+    <input type="color" id="color-picker" value="#ffffff" />
+    <button id="btn-guardar">Guardar Diseño</button>
+    <button id="btn-modificar-real">Modificar Diseño</button>
+    <button id="btn-limpiar">Reiniciar Colores</button>
+    <input type="hidden" id="camiseta-id">
+  </div>
+  <h3>Mis camisetas</h3>
+  <div class="tabla-fullwidth-container">
+    <table id="tabla-camisetas" class="display">
+      <thead>
+        <tr>
+          <th>Miniatura</th>
+          <th>Fecha creación</th>
+          <th>Creador</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- El cuerpo se llenará dinámicamente -->
+      </tbody>
+    </table>
+  </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script>
+    const svg = document.getElementById('camiseta-svg');
+    const colorPicker = document.getElementById('color-picker');
+    const btnGuardar = document.getElementById('btn-guardar');
+    const btnModificarReal = document.getElementById('btn-modificar-real');
+    const btnLimpiar = document.getElementById('btn-limpiar');
+    btnModificarReal.style.display = 'none';
+    const camisetaIdInput = document.getElementById('camiseta-id');
 
+    let parteSeleccionada = null;
 
+    svg.addEventListener('click', (event) => {
+      if (event.target.classList.contains('parte-camiseta')) {
+        parteSeleccionada = event.target;
+        const colorActual = parteSeleccionada.getAttribute('fill');
+        colorPicker.value = colorActual;
+      }
+    });
 
+    colorPicker.addEventListener('input', (event) => {
+      if (parteSeleccionada) {
+        parteSeleccionada.setAttribute('fill', event.target.value);
+      }
+    });
 
-    <script>
-      // Referencias a elementos del DOM
-      const svg = document.getElementById('camiseta-svg');
-      const colorPicker = document.getElementById('color-picker');
-      const btnGuardar = document.getElementById('btn-guardar');
-      const btnModificarReal = document.getElementById('btn-modificar-real');
-      const btnLimpiar = document.getElementById('btn-limpiar');
-      const camisetaIdInput = document.getElementById('camiseta-id');
+    btnLimpiar.addEventListener('click', () => {
+      document.querySelectorAll('.parte-camiseta').forEach(el => {
+        el.setAttribute('fill', '#ffffff');
+      });
+    });
 
-      let parteSeleccionada = null; // elemento SVG actualmente seleccionado por el usuario
+    btnGuardar.addEventListener('click', async () => {
+      const diseño = {
+        torsoColor: document.getElementById('torso').getAttribute('fill'),
+        mangaIzqColor: document.getElementById('manga-izquierda').getAttribute('fill'),
+        mangaDerColor: document.getElementById('manga-derecha').getAttribute('fill'),
+        cuelloColorder: document.getElementById('cuelloder').getAttribute('fill'),
+        cuelloColorizq: document.getElementById('cuelloizq').getAttribute('fill')
+      };
+      const resp = await fetch('/api/camisetas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(diseño)
+      });
+      const data = await resp.json();
+      console.log('Diseño guardado en servidor:', data);
+      alert('Camiseta guardada exitosamente');
+      cargarTabla();
+    });
 
-      // Event listener para seleccionar parte de la camiseta al hacer click
-      svg.addEventListener('click', (event) => {
-        if (event.target.classList.contains('parte-camiseta')) {
-          parteSeleccionada = event.target;  // establece la parte clickeada como seleccionada
-          // Actualizar el colorPicker al color actual de la parte
-          const colorActual = parteSeleccionada.getAttribute('fill');
-          colorPicker.value = colorActual;
+    btnModificarReal.addEventListener('click', async () => {
+      const diseño = obtenerColoresActuales();
+      const id = camisetaIdInput.value;
+      const resp = await fetch(`/api/camisetas/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(diseño)
+      });
+      await resp.json();
+      cargarTabla();
+      btnLimpiar.click();
+        btnGuardar.style.display = 'inline';
+      btnModificarReal.style.display = 'none';
+    });
+
+    function obtenerColoresActuales() {
+      return {
+        torsoColor: document.getElementById('torso').getAttribute('fill'),
+        mangaIzqColor: document.getElementById('manga-izquierda').getAttribute('fill'),
+        mangaDerColor: document.getElementById('manga-derecha').getAttribute('fill'),
+        cuelloColorder: document.getElementById('cuelloder').getAttribute('fill'),
+        cuelloColorizq: document.getElementById('cuelloizq').getAttribute('fill')
+      };
+    }
+
+    function generarMiniatura(c) {
+      return `
+      <svg class="miniatura" viewBox="1 2 26 14">
+        <path d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="${c.mangaIzqColor}" />
+        <path d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="${c.torsoColor}" />
+        <path d="M 13 6 L 13 3 L 17 5 L 15 7" fill="${c.mangaDerColor}" />
+        <path d="M 8 2 L 7 3 L 9 5 L 8 3" fill="${c.cuelloIzqColor}" />
+        <path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${c.cuelloDerColor}" />
+      </svg>`;
+    }
+
+    async function cargarTabla() {
+      const resp = await fetch('/api/camisetas', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
         }
       });
+      const camisetas = await resp.json();
+      const tabla = $('#tabla-camisetas').DataTable();
 
-      // Event listener para cambiar color de la parte seleccionada
-      colorPicker.addEventListener('input', (event) => {
-        if (parteSeleccionada) {
-          parteSeleccionada.setAttribute('fill', event.target.value);
+      tabla.clear();
+
+      camisetas.forEach(c => {
+        let nombreCreador = 'Desconocido';
+        if (c.creador && typeof c.creador === 'object') {
+          nombreCreador = c.creador.nombre || c.creador.correo || 'Usuario';
+        } else if (typeof c.creador === 'string') {
+          nombreCreador = c.creador;
         }
+        tabla.row.add([
+          generarMiniatura(c),
+          new Date(c.fechaCreacion).toLocaleString(),
+          nombreCreador,
+          `<button onclick='editarCamiseta("${c._id}")'>Modificar</button>
+           <button onclick='eliminarCamiseta("${c._id}")'>Eliminar</button>`
+        ]);
       });
+      tabla.draw();
+    }
 
-      // Botón para reiniciar todos los colores a blanco
-      btnLimpiar.addEventListener('click', () => {
-        document.querySelectorAll('.parte-camiseta').forEach(el => {
-          el.setAttribute('fill', '#ffffff');
-        });
-        parteSeleccionada = null;
+    async function editarCamiseta(id) {
+      const resp = await fetch(`/api/camisetas/${id}`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
       });
+      const c = await resp.json();
+      document.getElementById('torso').setAttribute('fill', c.torsoColor);
+      document.getElementById('manga-izquierda').setAttribute('fill', c.mangaIzqColor);
+      document.getElementById('manga-derecha').setAttribute('fill', c.mangaDerColor);
+      document.getElementById('cuelloder').setAttribute('fill', c.cuelloDerColor);
+      document.getElementById('cuelloizq').setAttribute('fill', c.cuelloIzqColor);
+      camisetaIdInput.value = c._id;
+      btnGuardar.style.display = 'none';
+      btnModificarReal.style.display = 'inline';
+    }
 
-      // Botón guardar (puedes personalizar la acción)
-      btnGuardar.addEventListener('click', () => {
-        const colores = {};
-        document.querySelectorAll('.parte-camiseta').forEach(el => {
-          colores[el.id] = el.getAttribute('fill');
-        });
-        alert('Colores guardados: ' + JSON.stringify(colores, null, 2));
+    async function eliminarCamiseta(id) {
+      if (!confirm('¿Está seguro de eliminar esta camiseta?')) return;
+      await fetch(`/api/camisetas/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
       });
+      cargarTabla();
+    }
 
-      btnGuardar.addEventListener('click', async () => {
-  // Obtener colores actuales de cada parte
-  const diseño = {
-    torsoColor: document.getElementById('torso').getAttribute('fill'),
-    mangaIzqColor: document.getElementById('manga-izquierda').getAttribute('fill'),
-    mangaDerColor: document.getElementById('manga-derecha').getAttribute('fill'),
-    cuelloIzqColor: document.getElementById('cuelloizq').getAttribute('fill'),
-    cuelloDerColor: document.getElementById('cuelloder').getAttribute('fill')
-  };
-
-btnModificarReal.addEventListener('click', async () => {
-
-  const diseño = obtenerColoresActuales();
-  const id =camisetaIdInput.value;
-  const resp = await fetch(`/api/camisetas/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('token')
-    },
-    body: JSON.stringify(diseño)
-  });
-  await resp.json();
-  cargarTabla(); // Recargar la tabla para ver los cambios
-  btnLimpiar.click(); // Limpiar los colores después de modificar
-});
-function obtenerColoresActuales() {
-  return {
-    torsoColor: document.getElementById('torso').getAttribute('fill'),
-    mangaIzqColor: document.getElementById('manga-izquierda').getAttribute('fill'),
-    mangaDerColor: document.getElementById('manga-derecha').getAttribute('fill'),
-    cuelloColorder: document.getElementById('cuelloder').getAttribute('fill'),
-    cuelloColorizq: document.getElementById('cuelloizq').getAttribute('fill')
-  };
-}
-
-
-// Genera un SVG miniatura como string para mostrar en la tabla
-function generarMiniatura(c) {
-return `
-<svg class="miniatura" viewBox="1 2 26 14">
-<path d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="${c.mangaIzqColor}" />
-<path d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="${c.torsoColor}" />
-<path d="M 13 6 L 13 3 L 17 5 L 15 7" fill="${c.mangaDerColor}" />
-<path d="M 8 2 L 7 3 L 9 5 L 8 3" fill="${c.cuelloIzqColor}" />
-<path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${c.cuelloDerColor}" />
-</svg>`;
-}
-
-
-
-  
-  async function cargarTabla() {
-    
-
-const resp = await fetch('/api/camisetas', {
-  headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-});
-const camisetas = await resp.json();
-console.log(camisetas);
-
-
-// Inicializar la tabla como DataTable (asociada al elemento HTML con id 'tabla-camisetas')
-const tabla = $('#tabla-camisetas').DataTable();
-
-// Suponiendo que tenemos la lista de camisetas disponible en la variable `camisetas` (por ejemplo, insertada desde el servidor o recibida via AJAX):
-camisetas.forEach(c => {
-  // Determinar el nombre a mostrar para el creador de la camiseta
-  let nombreCreador = 'Desconocido';
-  if (c.creador && typeof c.creador === 'object') {
-    // Si 'creador' es un objeto, tomamos su nombre, o correo si no hay nombre, o 'Usuario' genérico
-    nombreCreador = c.creador.nombre || c.creador.correo || 'Usuario';
-  } else if (typeof c.creador === 'string') {
-    // Si 'creador' es una cadena (por ejemplo un nombre ya o un ID en texto), lo usamos directamente
-    nombreCreador = c.creador;
-  }
-
-  // Añadir una nueva fila a la tabla con los datos de la camiseta
-  tabla.row.add([
-    generarMiniatura(c),                           // Columna 1: Miniatura de la camiseta (HTML de imagen/SVG)
-    new Date(c.fechaCreacion).toLocaleString(),    // Columna 2: Fecha de creación en formato legible
-    nombreCreador,                                 // Columna 3: Nombre/Correo del creador (nuevo campo)
-    // Columna 4: Botones de acciones (Modificar/Eliminar), con el ID incrustado en la llamada
-    `<button onclick='editarCamiseta("${c._id}")'>Modificar</button>
-     <button onclick='eliminarCamiseta("${c._id}")'>Eliminar</button>`
-  ]);
-});
-
-// Finalmente, dibujar/refrescar la tabla para que muestre las filas añadidas
-tabla.draw();
-  }
-
-  // Carga una camiseta en el diseño principal para edición
-async function editarCamiseta(id) {
-  const resp = await fetch(`/api/camisetas/${id}`, {
-    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-  });
-
-  const c = await resp.json();
-
-  // Cargar los colores en el SVG principal
-  document.getElementById('torso').setAttribute('fill', c.torsoColor);
-  document.getElementById('manga-izquierda').setAttribute('fill', c.mangaIzqColor);
-  document.getElementById('manga-derecha').setAttribute('fill', c.mangaDerColor);
-  document.getElementById('cuelloder').setAttribute('fill', c.cuelloDerColor);
-  document.getElementById('cuelloizq').setAttribute('fill', c.cuelloIzqColor);
-
-  // Guardar el ID actual y cambiar visibilidad de botones
-  camisetaIdInput.value = c._id;
-  btnGuardar.style.display = 'none';
-  btnModificarReal.style.display = 'inline';
-}
-
-
-
-// Elimina una camiseta después de confirmar
-async function eliminarCamiseta(id) {
-if (!confirm('¿Está seguro de eliminar esta camiseta?')) return;
-await fetch(`/api/camisetas/${id}`, {
-method: 'DELETE',
-headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-});
-cargarTabla(); // Refresca tabla
-}
-
-
-
-
-
-
-  // Enviar via fetch al servidor
-  const resp = await fetch('/api/camisetas', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem("token") // incluir token si es ruta protegida
-    },
-    body: JSON.stringify(diseño)
-  });
-  const data = await resp.json();
-  console.log('Diseño guardado en servidor:', data);
-  alert('Diseño guardado exitosamente!');
-});
-
-$(document).ready(() => {
-    $('#tabla-camisetas').DataTable({responsive: true });
-    cargarTabla(); // Cargar camisetas al iniciar
-       
-  });
-
-
-    </script>
+    $(document).ready(() => {
+      $('#tabla-camisetas').DataTable({responsive: true });
+      cargarTabla();
+    });
+  </script>
 </body>
 </html>
