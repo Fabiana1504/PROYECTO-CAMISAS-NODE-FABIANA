@@ -1,12 +1,34 @@
 const Camiseta = require('../modelos/camisetaEsquema');
 const bcrypt = require('bcryptjs');
+const Usuario = require('../modelos/usuarioEsquema'); // Importar el modelo de usuario
 const jwt = require('jsonwebtoken');
 
 
 exports.getCamisetas = async (req, res) => {
   try {
-    const Camiseta = await Camiseta.find();
-    res.json(Camiseta);
+    // Supongamos que ya tenemos una lista de camisetas obtenida de la base de datos:
+const camisetas = await Camiseta.find();  // Lista de camisetas desde la coleccion (ejemplo)
+
+// Enriquecer cada camiseta con datos del usuario creador:
+const camisetasConUsuario = await Promise.all(
+  camisetas.map(async (c) => {
+    try {
+      // Buscar al usuario por ID (c.creador) y seleccionar solo nombre y correo
+      const usuario = await Usuario.findById(c.creador).select('nombre correo');
+      return {
+        ...c.toObject(),        // Convertir el documento de Mongoose a objeto plano JS
+        creador: usuario || null // Reemplazar el campo 'creador' con los datos del usuario (o null si no se encontró)
+      };
+    } catch (error) {
+      // En caso de error al buscar usuario, devolvemos la camiseta con 'creador' null
+      return {
+        ...c.toObject(),
+        creador: null
+      };
+    }
+  })
+);
+    res.json(camisetasConUsuario); // Enviar la lista enriquecida como respuesta
   } catch (error) {
     res.status(500).json({ error: 'Error del servidor' });
   }
@@ -28,6 +50,7 @@ exports.createCamiseta = async (req, res) => {
         // 1. Generar un salt (semilla aleatoria) para el hash
 
   const nuevoCamiseta = new Camiseta(req.body);
+  nuevoCamiseta.creador = req.usuarioId; // Asignar el ID del usuario autenticado como creador
    CamisetaGuardada= await nuevoCamiseta.save();
     
 
