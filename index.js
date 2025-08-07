@@ -1,4 +1,5 @@
-const mongoURI = 'mongodb+srv://Fabiana1504:123@cluster0.a08e3ro.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+require('dotenv').config(); // Cargar variables de entorno desde .env
+const mongoURI = process.env.DB_HOST; // Obtener la URI de conexión desde las variables de entorno
 const routes = require('./rutas/rutasUsuario');    // Importa las rutas de usuario
 const camisetaRoutes = require('./rutas/rutasCamiseta'); // Importa las rutas de camiseta
 const express = require('express');
@@ -37,6 +38,10 @@ app.get('/camiseta', verificarToken, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'camiseta.html'));
 });
 
+app.get("/carrusel", verificarToken, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "carrusel.html")); // Envía el archivo votaciones.html
+});
+
 app.get('/registro', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'registro.html'));
 });
@@ -50,4 +55,8 @@ app.use('/api/usuarios', routes); // Usa las rutas de usuario definidas en usuar
 app.listen(PORT, () => {
   console.log(`Servidor API escuchando en http://localhost:${PORT}`);
 });
+
+
+
+
 // Probar en http://localhost:3000/registro.html

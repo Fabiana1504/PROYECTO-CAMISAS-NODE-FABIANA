@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrusel de Camisetas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f7fafd;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      color: #222;
+      margin-top: 2rem;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .carrusel {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      width: 100vw;
+      padding: 2rem 0 2rem 1vw;
+      box-sizing: border-box;
+    }
+    .carrusel::-webkit-scrollbar { display: none; }
+    .carrusel { scrollbar-width: none; -ms-overflow-style: none; }
+
+    .card {
+      flex-shrink: 0;
+      flex-basis: 240px;
+      scroll-snap-align: start;
+      margin-right: 1.5rem;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      padding: 1.2rem 1rem 1rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 320px;
+      transition: box-shadow 0.2s;
+    }
+    .card:last-child { margin-right: 0; }
+    .miniatura-camiseta {
+      margin-bottom: 1rem;
+      width: 80px;
+      height: 80px;
+      display: block;
+      border-radius: 8px;
+      background: #f3f6fa;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .nombre-creador {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #222;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .calificacion {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 0.3rem;
+    }
+    .fecha {
+      font-size: 0.95rem;
+      color: #888;
+      margin-bottom: 0.7rem;
+    }
+    .botones-reaccion {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: auto;
+    }
+    .btn-like, .btn-dislike {
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-like {
+      background: #4caf50;
+      color: #fff;
+    }
+    .btn-like:hover {
+      background: #388e3c;
+    }
+    .btn-dislike {
+      background: #f44336;
+      color: #fff;
+    }
+    .btn-dislike:hover {
+      background: #c62828;
+    }
+    @media (max-width: 600px) {
+      .card { flex-basis: 80vw; min-width: 220px; }
+      .miniatura-camiseta { width: 60px; height: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <h2>Carrusel de Camisetas</h2>
+  <div class="carrusel" id="contenedor-camisetas">
+    <!-- Las tarjetas se llenan dinámicamente -->
+  </div>
+  <script>
+    function generarMiniatura(c) {
+      // Puedes ajustar los colores según tu modelo de datos
+      return `
+      <svg class="miniatura-camiseta" viewBox="1 2 26 14">
+        <path d="M 4 8 M 5 3 L 5 6 L 3 7 L 1 5" fill="${c.mangaIzqColor || '#bbb'}" />
+        <path d="M 9 5 L 7 3 L 5 3 L 5 6 L 5 12 L 13 12 L 13 6 L 13 3 L 11 3" fill="${c.torsoColor || '#888'}" />
+        <path d="M 13 6 L 13 3 L 17 5 L 15 7" fill="${c.mangaDerColor || '#bbb'}" />
+        <path d="M 8 2 L 7 3 L 9 5 L 8 3" fill="${c.cuelloIzqColor || '#fff'}" />
+        <path d="M 10 2 L 11 3 L 9 5 L 10 3 M 1 4" fill="${c.cuelloDerColor || '#fff'}" />
+      </svg>`;
+    }
+
+    async function cargarCamisetas() {
+      try {
+        const resp = await fetch('/api/camisetas', {
+          headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        const camisetas = await resp.json();
+
+        const contenedor = document.getElementById('contenedor-camisetas');
+        contenedor.innerHTML = '';
+
+        camisetas.forEach(c => {
+          let nombre = 'Desconocido';
+          if (c.creador && typeof c.creador === 'object') {
+            nombre = c.creador.nombre || c.creador.correo || 'Usuario';
+          } else if (typeof c.creador === 'string') {
+            nombre = c.creador;
+          }
+
+          const calificacion = typeof c.calificacion === 'number' ? c.calificacion.toFixed(1) : '0.0';
+
+          const card = document.createElement('div');
+          card.classList.add('card');
+          card.innerHTML = `
+            ${generarMiniatura(c)}
+            <div class="nombre-creador">${nombre}</div>
+            <div class="calificacion">Calificación: ⭐ ${calificacion}</div>
+            <div class="fecha">${new Date(c.fechaCreacion).toLocaleDateString()}</div>
+            <div class="botones-reaccion">
+              <button class="btn-like" onclick="reaccion('${c._id}', 1)">Me gusta</button>
+              <button class="btn-dislike" onclick="reaccion('${c._id}', -1)">No me gusta</button>
+            </div>
+          `;
+          contenedor.appendChild(card);
+        });
+
+      } catch (error) {
+        console.error('Error al cargar camisetas:', error);
+      }
+    }
+
+    // Enviar voto a la API y actualizar carrusel
+    async function reaccion(id, valor) {
+      try {
+        const resp = await fetch(`/api/camisetas/vota/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          },
+          body: JSON.stringify({ calificacion: valor })
+        });
+
+        if (resp.ok) {
+          const result = await resp.json();
+          console.log('Actualización exitosa:', result);
+          await cargarCamisetas();
+        } else {
+          const error = await resp.json();
+          alert('Error al votar: ' + error.error);
+        }
+      } catch (error) {
+        alert('Error al conectar con el servidor');
+      }
+    }
+
+    // Inicializar carrusel al cargar la página
+    cargarCamisetas();
+  </script>
+</body>

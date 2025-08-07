@@ -9,5 +9,6 @@ router.get('/:id', verificarToken, camisetaController.getCamisetaById);
 router.post('/', verificarToken, camisetaController.createCamiseta);
 router.put('/:id', verificarToken,  camisetaController.updateCamiseta);
 router.delete('/:id', verificarToken, camisetaController.deleteCamiseta);
+router.put('/vota/:id', verificarToken,  camisetaController.votarCamiseta);
 
 module.exports = router;
